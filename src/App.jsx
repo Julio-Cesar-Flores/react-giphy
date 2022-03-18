@@ -1,45 +1,42 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import React from "react";
+import axios from "axios";
+import SearchBar from "./componentes/SearchBar";
+import "./App.css";
+import Imagen from "./componentes/Imagen";
 
-function App() {
-  const [count, setCount] = useState(0)
+class App extends React.Component {
+  state = {
+    results: [],
+  };
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.jsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
-  )
+  sendSearch = (search) => {
+    //const apiKey = "7YZnB1qGeFMQ0ziBL9xVRokPCQQmIKZZ";
+    const apiKey = process.env.REACT_APP_API_KEY;
+    axios
+      .get(
+        `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${search}&limit=10&offset=0&rating=g&lang=es`
+      )
+      .then((response) => {
+        this.setState({ results: response.data.data });
+      })
+      .catch((error) => console.log(error));
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <SearchBar sendSearch={this.sendSearch} />
+        <div className="grid-cards">
+          {this.state.results.map((gif) => {
+            console.log(gif);
+            return (
+              <Imagen key={gif.id} url={gif.images.fixed_height_small.url} />
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 }
 
-export default App
+export default App;
