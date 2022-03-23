@@ -1,4 +1,5 @@
 import React from "react";
+import './searchBar.css';
 
 class Imagen extends React.Component {
   render() {

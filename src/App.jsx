@@ -3,7 +3,6 @@ import axios from "axios";
 import SearchBar from "./componentes/SearchBar";
 import "./App.css";
 import Imagen from "./componentes/Imagen";
-
 class App extends React.Component {
   state = {
     results: [],
@@ -11,7 +10,8 @@ class App extends React.Component {
 
   sendSearch = (search) => {
     //const apiKey = "7YZnB1qGeFMQ0ziBL9xVRokPCQQmIKZZ";
-    const apiKey = process.env.REACT_APP_API_KEY;
+    const apiKey = import.meta.env.API_KEY;
+    //console.log(import.meta.env)
     axios
       .get(
         `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${search}&limit=10&offset=0&rating=g&lang=es`
